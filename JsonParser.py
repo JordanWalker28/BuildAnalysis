@@ -1,19 +1,40 @@
 import json
 import objectpath
 
-with open('json.json') as f:
-  data = json.load(f)
-f.close()
+def openFile(file):
+    with open(file) as f:
+        data = json.load(f)
+    f.close()
+    return data
 
-jsonnn_tree = objectpath.Tree(data['suites'])
+def createDictionary(data):
+    jsonnn_tree = objectpath.Tree(data['suites'])
 
-classes = []
-durations = []
+    classes = []
+    durations = []
 
-result_case = tuple(jsonnn_tree.execute('$..className'))
-result_duration = tuple(jsonnn_tree.execute('$..duration'))
+    result_case = tuple(jsonnn_tree.execute('$..className'))
+    result_duration = tuple(jsonnn_tree.execute('$..duration'))
 
-classes = list(result_case)
-duration = list(result_duration)
+    classes = list(result_case)
+    duration = list(result_duration)
 
-print(classes)
+    duration.remove(duration[0])
+
+    name_value_tuples = zip(classes, duration)
+    name_to_value_dict = {}
+    for key, value in name_value_tuples:
+        if key in name_to_value_dict:
+            pass
+        else:
+            name_to_value_dict[key] = value
+
+    return name_to_value_dict
+
+
+
+data = openFile('json.json')
+dictionary = createDictionary(data)
+
+for x, y in dictionary.items():
+    print(x,y)
