@@ -5,7 +5,23 @@ def openFile(file):
     with open(file) as f:
         data = json.load(f)
     f.close()
+    
     return data
+    
+def createDict(list1, list2):
+
+    d = {}
+    for k, v in zip(list1, list2):
+        if k in d:
+            d[k].append(v)
+        else:
+            d[k] = [v]
+
+    for field, possible_values in d.items():
+        print(field, possible_values)
+        print()
+
+    return d
 
 def extractInfo(data):
     jsonnn_tree = objectpath.Tree(data['suites'])
@@ -28,12 +44,17 @@ def extractInfo(data):
     print("result name: " + str(len(name)))
     print("result duration: " + str(len(duration)))
     
-    print(classes[1] + " " + name[1] + " " + str(duration[1]))
-
-
+    rangeItems = len(classes)
+    newData = []
+    
+    for i in range(0,rangeItems):
+        newData.append("name:" + name[i]+ " duration:" + str(duration[i]))
+        
+    dictionary = createDict(classes, newData)
+    
+    return dictionary
+  
 
 data = openFile('json.json')
 newData = extractInfo(data)
 
-#for x, y in dictionary.items():
-    #print(x,y)
