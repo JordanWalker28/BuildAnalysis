@@ -17,10 +17,6 @@ def createDict(list1, list2):
         else:
             d[k] = [v]
 
-    for field, possible_values in d.items():
-        print(field, possible_values)
-        print()
-
     return d
 
 def extractInfo(data):
@@ -53,8 +49,13 @@ def extractInfo(data):
     dictionary = createDict(classes, newData)
     
     return dictionary
-  
+
+def createJsonFile(dataFile):
+    dataFile = (json.dumps([{'classname': k, 'values': v} for k,v in dataFile.items()], indent=4))
+    with open('result.json', 'w') as fp:
+        json.dump(dataFile, fp)
 
 data = openFile('json.json')
 newData = extractInfo(data)
-
+createJsonFile(newData)
+print("Done")
