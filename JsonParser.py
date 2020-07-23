@@ -1,5 +1,7 @@
 import json
 import objectpath
+import sys
+import os.path
 
 def openFile(file):
     with open(file) as f:
@@ -8,7 +10,7 @@ def openFile(file):
     
     return data
     
-def createDict(list1, list2):
+def createDictFromList(list1, list2):
 
     d = {}
     for k, v in zip(list1, list2):
@@ -16,6 +18,30 @@ def createDict(list1, list2):
             d[k].append(v)
         else:
             d[k] = [v]
+
+    return d
+
+def getCommandArguments():
+    
+    print ('Enter The Files You Wish To Use', sys.argv, 'arguments.')
+    list = []
+    
+    for i in sys.argv:
+        os.path.exists(i)
+        os.path.isfile(i)
+        list.append(i)
+        
+    print(list)
+    print ('Starting:', str(sys.argv))
+    
+    
+    return list
+
+def createDict(list1, list2):
+
+    d = {}
+    for k, v in zip(list1, list2):
+            d[k] = v
 
     return d
 
@@ -45,8 +71,17 @@ def extractInfo(data):
     
     for i in range(0,rangeItems):
         newData.append("name:" + name[i]+ " duration:" + str(duration[i]))
-        
+     
+    
     dictionary = createDict(classes, newData)
+    dictionary2 = createDict(name, duration)
+    
+    for k in dictionary.items():
+        print(k)
+        for k,v in dictionary2.items():
+            print("     " + k +"/n   " +v)
+    
+    dictionary3 = (dictionary,dictionary2)
     
     return dictionary
 
@@ -55,7 +90,10 @@ def createJsonFile(dataFile):
     with open('result.json', 'w') as fp:
         json.dump(dataFile, fp)
 
-data = openFile('json.json')
-newData = extractInfo(data)
-createJsonFile(newData)
-print("Done")
+#data = openFile('json.json')
+#newData = extractInfo(data)
+#createJsonFile(newData)
+#print("Done")
+
+Files = getCommandArguments()
+
